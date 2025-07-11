@@ -1,2 +1,2 @@
-book_to_update = Book.objects.filter(title="1984")
-book_to_update.title("Nineteen Eighty-Four")
+#python command to update the book 1984 filtered by name
+book.title("Nineteen Eighty-Four") 
