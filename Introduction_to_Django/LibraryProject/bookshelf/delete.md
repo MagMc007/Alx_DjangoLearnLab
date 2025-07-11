@@ -1,3 +1,5 @@
 #command to delete an object
-Book.objects.filter(title="Nineteen Eighty-Four").delete()
+from bookshelf.models import Book
+
+book.delete()
 #(1, {'bookshelf.Book': 1})
