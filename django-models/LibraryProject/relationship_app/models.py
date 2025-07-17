@@ -6,7 +6,7 @@ class Author(models.Model):
     name = models.CharField(max_length=20)
 
     def __str__(self):
-        return f"{self.name}"
+        return self.name
 
 
 class Book(models.Model):
@@ -18,7 +18,7 @@ class Book(models.Model):
         )
     
     def __str__(self):
-        return f"{self.title}"
+        return self.title
 
 
 class Library(models.Model):
@@ -29,7 +29,7 @@ class Library(models.Model):
     )
 
     def __str__(self):
-        return f"{self.name} {self.books}"
+        return self.name
 
 
 class Librarian(models.Model):
@@ -41,4 +41,4 @@ class Librarian(models.Model):
     )
 
     def __str__(self):
-        return f"{self.name}"
+        return self.name
