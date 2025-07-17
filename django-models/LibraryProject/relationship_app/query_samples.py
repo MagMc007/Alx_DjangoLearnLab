@@ -1,4 +1,4 @@
-from .models import Author, Library, Book
+from .models import Author, Library, Book, Librarian
 
 
 # query all books by an author
@@ -18,5 +18,4 @@ for book in books:
     print(book)
 
 # Retrieve the librarian for a library.
-library = Library.objects.get(name=library_name)
-print(library.librarian.name)
+library = Librarian.objects.get(library=library_name)
