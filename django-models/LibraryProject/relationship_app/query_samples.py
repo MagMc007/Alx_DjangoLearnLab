@@ -1,5 +1,7 @@
 #query all books by an author
-Book.objects.filter(author__name="specific author")
+author_name = "specific author"
+author = Author.object.get(name=author_name)
+Book.objects.filter(author=author)
 
 #list all books in the library
 library_name="alx library"
