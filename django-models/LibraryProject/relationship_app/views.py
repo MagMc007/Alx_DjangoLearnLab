@@ -1,11 +1,11 @@
 from django.shortcuts import render
-from django.views.genric import DetailView
+from django.views.generic import DetailView
 from .models import Book
 
 
 def listBooks(request):
     """Obtains all books from databse and renders some html"""
-    books = Book.object.all()
+    books = Book.objects.all()
 
     context = {"book_list": books}  #store it in context  as dynamic data
 
