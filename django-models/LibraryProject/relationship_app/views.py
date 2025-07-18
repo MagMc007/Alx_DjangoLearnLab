@@ -4,7 +4,7 @@ from .models import Book
 from .models import Library
 
 
-def listBooks(request):
+def list_books(request):
     """Obtains all books from databse and renders some html"""
     books = Book.objects.all()
 
@@ -14,7 +14,7 @@ def listBooks(request):
 
 
 # Create your views here.
-class DisplayDetails(DetailView):
+class LibraryDetailView(DetailView):
     model = Library
     template_name = "relationship_app/library_detail.html"
     context_object_name = 'library'
