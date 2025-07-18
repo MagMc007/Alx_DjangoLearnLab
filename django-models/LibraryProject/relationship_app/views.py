@@ -9,13 +9,13 @@ def listBooks(request):
 
     context = {"book_list": books}  #store it in context  as dynamic data
 
-    return render(request, "list_books.html", context)
+    return render(request, "relationship_app/list_books.html", context)
 
 
 # Create your views here.
 class DisplayDetails(DetailView):
     model = Book
-    template_name = "library_detail.html"
+    template_name = "relationship_app/library_detail.html"
     context_object_name = 'library'
     
 
