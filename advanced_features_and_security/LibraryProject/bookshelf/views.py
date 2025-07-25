@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import permission_required
+from .forms import ExampleForm
+
+
 
 @permission_required("bookshelf.can_create", raise_exception=True)
 def create_view(request):
@@ -19,4 +22,5 @@ def delete_view(request):
     return HttpResponse("This is the delete page")
 
 
-
+def search_view(request):
+    form = ExampleForm(request.GET)
