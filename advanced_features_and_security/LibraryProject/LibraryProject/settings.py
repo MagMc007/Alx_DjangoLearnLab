@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-ig^0%jlz0qpy30u9(-ahjunbic6^8=h!tkcielg4hcm5hf-i19"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "csp",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "csp.middleware.CSPMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -128,3 +130,18 @@ LOGOUT_REDIRECT_URL = 'login'
 
 
 AUTH_USER_MODEL = "bookshelf.CustomUser"
+
+# prevents XSS by activating protection agains XSS
+SECURE_BROWSER_XSS_FILTER = True
+
+# to prevent clickjacking
+X_FRAME_OPTIONS = 'DENY'
+
+# stops browsers from guessing filetype
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# csrf can only be sent over HTTPS
+CSRF_COOKIE_SECURE = True
+
+# ensures user sessons are sent only on https
+SESSION_COOKIE_SECURE = True
