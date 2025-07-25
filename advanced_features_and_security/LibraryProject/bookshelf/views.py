@@ -7,7 +7,7 @@ def create_view(request):
     return HttpResponse("This is the create page")
 
 @permission_required("bookshelf.can_edit", raise_exception=True)
-def view_view(request):
+def book_list(request):
     return HttpResponse("This is the view page")
 
 @permission_required("bookshelf.can_view", raise_exception=True)
