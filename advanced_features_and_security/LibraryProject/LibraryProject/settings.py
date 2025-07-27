@@ -146,13 +146,18 @@ CSRF_COOKIE_SECURE = True
 # ensures user sessons are sent only on https
 SESSION_COOKIE_SECURE = True
 
-
+# forces all http redirects to be https
 SECURE_SSL_REDIRECT = True
 
-
+# time that the browser remembers to view the site in https
 SECURE_HSTS_SECONDS = 31536000
 
+# applpies hsts for all websites
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
-
+# hardcodes list of domains into browser to always use https
 SECURE_HSTS_PRELOAD = True
+
+
+# handle secure request that is processed over internal network though it is http
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
