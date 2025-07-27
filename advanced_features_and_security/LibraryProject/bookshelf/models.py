@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from .forms import ExampleForm
 
 
 class Book(models.Model):
@@ -62,5 +61,3 @@ class CustomPermission(models.Model):
         ]
 
         
-def search_view(request):
-    form = ExampleForm(request.GET)
