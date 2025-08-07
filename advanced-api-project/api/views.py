@@ -5,14 +5,15 @@ from rest_framework.mixins import (
     CreateModelMixin, ListModelMixin, RetrieveModelMixin,
     DestroyModelMixin, UpdateModelMixin
 )
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 
 """ this will list existing books """
 class ListView(GenericAPIView, ListModelMixin):
     serializer_class = BookSerializer
     queryset = Book.objects.all()
-
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
@@ -21,6 +22,7 @@ class ListView(GenericAPIView, ListModelMixin):
 class DetailView(GenericAPIView, RetrieveModelMixin):
     serializer_class = BookSerializer
     queryset = Book.objects.all()
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -30,7 +32,6 @@ class CreateView(GenericAPIView, CreateModelMixin):
     serializer_class = BookSerializer
     queryset = Book.objects.all()
     permission_classes = [IsAuthenticated]
-
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
