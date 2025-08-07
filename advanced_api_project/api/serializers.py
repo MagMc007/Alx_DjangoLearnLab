@@ -12,15 +12,16 @@ class BookSerializer(serializers.ModelSerializer):
     """ check if pub_yr is not from the future and raise error """
     def validate_publication_year(self, value):
         if value > datetime.now().year:
-            raise serializers.ValidationError("A book from the future")
+            raise serializers.ValidationError("{'publication_year': 'Cannot be from the future'}")
         return value
 
 """ serialzes the Author model """
+""" nest the book serializer to avoid extra query for a book"""
 
 
 class AuthorSerializer(serializers.ModelSerializer):
-    book = BookSerializer(read_only=True)
+    books = BookSerializer(read_only=True, many=True)
 
     class Meta:
         model = Author
-        fields = ["name", "book", ]
+        fields = ["name", "books"]

@@ -1,6 +1,8 @@
 from django.db import models
 
-""" this """
+""" database abstraction to represent author of a book"""
+
+
 class Author(models.Model):
     name = models.CharField(max_length=100)
 
@@ -8,8 +10,11 @@ class Author(models.Model):
         return self.name
 
 
+""" database  abstraction to represent a book """
+
+
 class Book(models.Model):
     title = models.CharField(max_length=100)
     publication_year = models.IntegerField()
     author = models.ForeignKey(
-        Author, on_delete=models.CASCADE, related_name="publisher")
+        Author, on_delete=models.CASCADE, related_name="books")
