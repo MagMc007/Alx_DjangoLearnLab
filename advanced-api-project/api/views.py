@@ -7,7 +7,7 @@ from rest_framework.mixins import (
 )
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated 
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 
 """ this will list existing books """
@@ -15,9 +15,12 @@ class ListView(GenericAPIView, ListModelMixin):
     serializer_class = BookSerializer
     queryset = Book.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly]
-    filter_backends = [DjangoFilterBackend, SearchFilter]
+    """ to apply filterings like search, order and literal filters"""
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    """ the fields needed to filter"""
     filterset_fields = ["title", "author__name", "publication_year"]
     search_fields = ["title", "author__name"]
+    ordering_fields = ["title", "publication_year"]
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
