@@ -1,6 +1,6 @@
 from .models import Book, Author
 from .serializers import BookSerializer, AuthorSerializer
-from rest_framework.generics import GenericAPIView
+from rest_framework import generics
 from rest_framework.mixins import (
     CreateModelMixin,
     ListModelMixin,
@@ -16,7 +16,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 """ this will list existing books """
 
 
-class ListView(GenericAPIView, ListModelMixin):
+class ListView(generics.GenericAPIView, ListModelMixin):
     serializer_class = BookSerializer
     queryset = Book.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -34,7 +34,7 @@ class ListView(GenericAPIView, ListModelMixin):
 """ this will retrieve a singe books by id """
 
 
-class DetailView(GenericAPIView, RetrieveModelMixin):
+class DetailView(generics.GenericAPIView, RetrieveModelMixin):
     serializer_class = BookSerializer
     queryset = Book.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -46,7 +46,7 @@ class DetailView(GenericAPIView, RetrieveModelMixin):
 """ this will allow creating of a book """
 
 
-class CreateView(GenericAPIView, CreateModelMixin):
+class CreateView(generics.GenericAPIView, CreateModelMixin):
     serializer_class = BookSerializer
     queryset = Book.objects.all()
     permission_classes = [IsAuthenticated]
@@ -58,7 +58,7 @@ class CreateView(GenericAPIView, CreateModelMixin):
 """ this update an existing book """
 
 
-class UpdateView(GenericAPIView, UpdateModelMixin):
+class UpdateView(generics.GenericAPIView, UpdateModelMixin):
     serializer_class = BookSerializer
     queryset = Book.objects.all()
     permission_classes = [IsAuthenticated]
@@ -70,7 +70,7 @@ class UpdateView(GenericAPIView, UpdateModelMixin):
 """ this will delete an existing book """
 
 
-class DeleteView(GenericAPIView, DestroyModelMixin):
+class DeleteView(generics.GenericAPIView, DestroyModelMixin):
     serializer_class = BookSerializer
     queryset = Book.objects.all()
     permission_classes = [IsAuthenticated]
