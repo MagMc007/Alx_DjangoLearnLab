@@ -6,6 +6,8 @@ from rest_framework.mixins import (
     DestroyModelMixin, UpdateModelMixin
 )
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated 
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
 
 
 """ this will list existing books """
@@ -13,6 +15,9 @@ class ListView(GenericAPIView, ListModelMixin):
     serializer_class = BookSerializer
     queryset = Book.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ["title", "author__name", "publication_year"]
+    search_fields = ["title", "author__name"]
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
