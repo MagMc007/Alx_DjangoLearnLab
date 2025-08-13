@@ -4,6 +4,7 @@
 {% block title %}Profile{% endblock %}
 {% block links %}{% endblock %}
 {% block content %}
+<a href="{% url 'edit_profile' %}">Edit profile</a>
 <form action="{% url 'logout' %}" method="post">
     {% csrf_token %}
     <button type="submit">Logout</button>
