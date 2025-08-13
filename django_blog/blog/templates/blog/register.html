@@ -1,5 +1,16 @@
 {% extends 'blog/base.html' %}
 
+
+{% block title %}
+Register
+{% endblock %}
+{% block links%}
+
+{% endblock %}
 {% block content %}
-{{ form.as_p }}
+<form action="{% url 'register' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+</form>
 {% endblock %}

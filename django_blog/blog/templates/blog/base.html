@@ -10,14 +10,17 @@
 </head>
 
 <body>
+    {% block links %}
     <header>
         <nav>
             <ul>
-                <li><a href="{% url 'register' %}">Register</a></li>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'posts' %}">Blog Posts</a></li>
+                <i><a href="{% url 'register' %}">Register</a></li>
             </ul>
         </nav>
     </header>
-
+    {% endblock %}
     <div class="content">
         {% block content %}
         <!-- Page-specific content goes here -->
@@ -28,7 +31,7 @@
         <p>&copy; 2024 Django Blog</p>
     </footer>
 
-    <script src="{% static 'js/scripts.js' %}"></script>
+    <script src="{% static 'blog/js/scripts.js' %}"></script>
 </body>
 
 </html>
