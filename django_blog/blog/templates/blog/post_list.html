@@ -12,7 +12,7 @@
   {% for post in posts %}
   <li>
     <a href="{% url 'detail-view' post.pk %}">{{ post.title }}</a>
-    <small>by {{ post.author }} on {{ post.created_at|date:"M d, Y" }}</small>
+    <small>by {{ post.author }}</small>
   </li>
   {% endfor %}
 </ul>
@@ -20,5 +20,5 @@
 <p>No posts available.</p>
 {% endif %}
 
-<a href="{% url 'create-view' %}">Create New Post</a>
+
 {% endblock %}

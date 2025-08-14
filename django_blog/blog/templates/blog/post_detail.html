@@ -7,14 +7,11 @@
 
 {% block content %}
 <h1>{{ post.title }}</h1>
-<p>by {{ post.author }} on {{ post.created_at|date:"M d, Y" }}</p>
+<p>by {{ post.author }}</p>
 <hr>
 <p>{{ post.content }}</p>
 
-{% if user == post.author %}
-<a href="{% url 'update-view' post.pk %}">Edit</a> |
-<a href="{% url 'delete-view' post.pk %}">Delete</a>
-{% endif %}
+<a href="{% url 'update-view' post.pk %}">update post</a>
+<a href="{% url 'delete-view' post.pk %}">Delete post</a>
 
-<a href="{% url 'list-view' %}">Back to Posts</a>
 {% endblock %}
