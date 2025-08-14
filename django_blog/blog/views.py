@@ -45,21 +45,30 @@ def edit_profiles(request):
 
 
 class ListView(generics.ListAPIView):
+    """ for displaying posts """
     serializer_class = PostSerializer
     queryset = Post.objects.all()
 
 
 class DetailView(generics.RetrieveAPIView):
-    ...
+    """ for searching a certain blog post """
+    serializer_class = PostSerializer
+    queryset = Post.objects.all()
 
 
 class CreateView(generics.CreateAPIView):
-    ...
+    """ for creating blog post """
+    serializer_class = PostSerializer
+    queryset = Post.objects.all()
 
 
 class UpdateView(generics.UpdateAPIView):
-    ...
+    """ update an existing post """
+    serializer_class = PostSerializer
+    queryset = Post.objects.all()
 
 
 class DeleteView(generics.DestroyAPIView):
-    ...
+    """ delete and existing post """
+    serializer_class = PostSerializer
+    queryset = Post.objects.all()
