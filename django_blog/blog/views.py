@@ -5,6 +5,9 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from rest_framework import generics
+from .serializer import PostSerializer
+from .models import Post
 
 
 class Registration(CreateView):
@@ -39,3 +42,24 @@ def edit_profiles(request):
     return render(request, "blog/change_profile.html", {
         "form": form,
     })
+
+
+class ListView(generics.ListAPIView):
+    serializer_class = PostSerializer
+    queryset = Post.objects.all()
+
+
+class DetailView(generics.RetrieveAPIView):
+    ...
+
+
+class CreateView(generics.CreateAPIView):
+    ...
+
+
+class UpdateView(generics.UpdateAPIView):
+    ...
+
+
+class DeleteView(generics.DestroyAPIView):
+    ...
