@@ -1,0 +1,13 @@
+{% extends "blog/base.html" %}
+
+
+{% block title %}Profile{% endblock %}
+{% block links %}{% endblock %}
+{% block content %}
+<h1>{{ post.title }}</h1>
+<p>{{ post.content }}</p>
+<p>Author: {{ post.author }}</p>
+<a href="{% url 'update-view' post.pk %}">Edit</a> |
+<a href="{% url 'delete-view' post.pk %}">Delete</a>
+<a href="{% url 'list-view' %}">Back to All Posts</a>
+{% endblock %}

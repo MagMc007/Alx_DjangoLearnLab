@@ -1,0 +1,19 @@
+{% extends "blog/base.html" %}
+
+
+{% block title %}Profile{% endblock %}
+{% block links %}{% endblock %}
+{% block content %}
+<h1>All Posts</h1>
+<a href="{% url 'create-view' %}">Create New Post</a>
+<ul>
+  {% for post in posts %}
+  <li>
+    <a href="{% url 'detail-view' post.pk %}">{{ post.title }}</a>
+    <p>{{ post.content|truncatechars:100 }}</p>
+  </li>
+  {% empty %}
+  <li>No posts yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

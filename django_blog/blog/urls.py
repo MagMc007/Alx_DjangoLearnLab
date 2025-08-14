@@ -9,6 +9,7 @@ urlpatterns = [
     path("edit_profile/", views.edit_profiles, name="edit_profile"),
     path("logout/", views.LogoutUser.as_view(), name="logout"),
     path("posts/", views.ListView.as_view(), name="list-view"),
+    path("post/new/", views.CreateView.as_view(), name="list-view"),
     path("posts/<int:pk>", views.DetailView.as_view(), nama="detail-view"),
     path("posts/<int:pk>/edit", views.UpdateView.as_view(), name="update-view"),
     path("posts/<int:pk>/delete", views.DeleteView.as_view(), name="delete-view"),
