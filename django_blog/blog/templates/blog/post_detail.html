@@ -3,11 +3,18 @@
 
 {% block title %}Profile{% endblock %}
 {% block links %}{% endblock %}
+
+
 {% block content %}
 <h1>{{ post.title }}</h1>
+<p>by {{ post.author }} on {{ post.created_at|date:"M d, Y" }}</p>
+<hr>
 <p>{{ post.content }}</p>
-<p>Author: {{ post.author }}</p>
+
+{% if user == post.author %}
 <a href="{% url 'update-view' post.pk %}">Edit</a> |
 <a href="{% url 'delete-view' post.pk %}">Delete</a>
-<a href="{% url 'list-view' %}">Back to All Posts</a>
+{% endif %}
+
+<a href="{% url 'list-view' %}">Back to Posts</a>
 {% endblock %}

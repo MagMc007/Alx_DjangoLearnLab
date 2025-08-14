@@ -5,11 +5,14 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from rest_framework import generics
 from .serializer import PostSerializer
 from .models import Post
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from django.views.generic import (
+    ListView,CreateView, DeleteView, DetailView, UpdateView
+)
+from .forms import PostForm
 
 
 class Registration(CreateView):
@@ -46,36 +49,45 @@ def edit_profiles(request):
     })
 
 
-class ListView(generics.ListAPIView):
-    """ for displaying posts """
-    serializer_class = PostSerializer
-    queryset = Post.objects.all()
-    permission_classes = [IsAuthenticatedOrReadOnly]
+class PostListView(ListView):
+    """ for listing all post contents """
+    model = Post
+    template_name = "blog/post_list.html"
+    context_object_name = "posts"
 
 
-class DetailView(generics.RetrieveAPIView):
-    """ for searching a certain blog post """
-    serializer_class = PostSerializer
-    queryset = Post.objects.all()
-    permission_classes = [IsAuthenticatedOrReadOnly]
+class PostDetailView(DetailView):
+    """ for viewing post """
+    model = Post
+    template_name = "blog/post_detail.html"
+    context_object_name = "post"
 
 
-class CreateView(generics.CreateAPIView):
-    """ for creating blog post """
-    serializer_class = PostSerializer
-    queryset = Post.objects.all()
-    authentication_classes = [IsAuthenticated]
+class PostCreateView(LoginRequiredMixin, CreateView):
+    """ for creating a post """
+    model = Post
+    form_class = PostForm
+    template_name = "blog/post_form.html"
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 
-class UpdateView(generics.UpdateAPIView):
-    """ update an existing post """
-    serializer_class = PostSerializer
-    queryset = Post.objects.all()
-    permission_classes = [IsAuthenticated]
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """ to update a post """
+    model = Post
+    form_class = PostForm
+    template_name = "blog/post_form.html"
+
+    def test_func(self):
+        return self.get_object().author == self.request.user
 
 
-class DeleteView(generics.DestroyAPIView):
-    """ delete and existing post """
-    serializer_class = PostSerializer
-    queryset = Post.objects.all()
-    permission_classes = [IsAuthenticated]
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    template_name = "blog/post_confirm_delete.html"
+    success_url = reverse_lazy("list-view")
+
+    def test_func(self):
+        return self.get_object().author == self.request.user
