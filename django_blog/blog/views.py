@@ -5,9 +5,11 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from rest_framework import generics
 from .serializer import PostSerializer
 from .models import Post
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 
 class Registration(CreateView):
@@ -48,27 +50,32 @@ class ListView(generics.ListAPIView):
     """ for displaying posts """
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class DetailView(generics.RetrieveAPIView):
     """ for searching a certain blog post """
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class CreateView(generics.CreateAPIView):
     """ for creating blog post """
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+    authentication_classes = [IsAuthenticated]
 
 
 class UpdateView(generics.UpdateAPIView):
     """ update an existing post """
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+    permission_classes = [IsAuthenticated]
 
 
 class DeleteView(generics.DestroyAPIView):
     """ delete and existing post """
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+    permission_classes = [IsAuthenticated]
