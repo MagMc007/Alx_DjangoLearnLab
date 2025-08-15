@@ -9,7 +9,7 @@
 <h1>{% if form.instance.pk %}Edit Post{% else %}Create Post{% endif %}</h1>
 <form method="post"
     action="{% if form.instance.pk %}{% url 'update-view' form.instance.pk %}{% else %}{% url 'create-view' %}{% endif %}">
-    >
+
     {% csrf_token %}
     {{ form}}
     <button type="submit">{% if form.instance.pk %}Done{% else %}Post{% endif %}</button>

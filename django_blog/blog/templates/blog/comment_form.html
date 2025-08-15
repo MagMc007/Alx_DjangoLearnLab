@@ -1,0 +1,16 @@
+{% extends "blog/base.html" %}
+
+
+{% block title %}Comment{% endblock %}
+{% block links %}{% endblock %}
+
+
+{% block content %}
+<form method="post"
+    action="{% if comment %}{% url 'comment-update-view' comment.pk %}{% else %}{% url 'comment-create-view' post.pk %}{% endif %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Comment</button>
+</form>
+
+{% endblock %}

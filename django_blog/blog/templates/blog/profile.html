@@ -5,6 +5,8 @@
 {% block links %}{% endblock %}
 {% block content %}
 <a href="{% url 'edit_profile' %}">Edit profile</a>
+<a href="{% url 'create-view' %}">make a post</a>
+
 <form action="{% url 'logout' %}" method="post">
     {% csrf_token %}
     <button type="submit">Logout</button>

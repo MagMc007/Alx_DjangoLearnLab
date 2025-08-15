@@ -3,14 +3,14 @@ from django.views.generic import CreateView
 from django.urls import reverse_lazy, reverse
 from .forms import CustomUserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import Post
+from .models import Post, Comment
 from django.views.generic import (
     ListView, CreateView, DeleteView, DetailView, UpdateView
 )
-from .forms import PostForm
+from .forms import PostForm, CommentForm
 
 
 class Registration(CreateView):
@@ -60,6 +60,12 @@ class PostDetailView(DetailView):
     template_name = "blog/post_detail.html"
     context_object_name = "post"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # add comments for this post
+        context["comments"] = Comment.objects.filter(post=self.object).order_by("created_at")
+        return context
+
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     """ for creating a post """
@@ -96,3 +102,64 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         return self.get_object().author == self.request.user
+
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    """ for creating comments """
+    model = Comment
+    form_class = CommentForm
+    template_name = "blog/comment_form.html"
+
+    # validate form and tie it to a post
+    def form_valid(self, form):
+        post = get_object_or_404(Post, pk=self.kwargs["pk"])
+        form.instance.post = post
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse("detail-view", kwargs={"pk": self.kwargs["pk"]})
+
+
+class CommentListView(ListView):
+    """ lists all comments below the deatil view """
+    model = Comment
+    template_name = "blog/post_detail.html"
+    context_object_name = "comments"
+    
+    # filter all comments tied to a post
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["post"] = get_object_or_404(Post, pk=self.kwargs["pk"])
+        return context
+
+
+class CommentUpdateView(LoginRequiredMixin, UpdateView):
+    """ update a comment for a post """
+    model = Comment
+    template_name = "blog/comment_form.html"
+    form_class = CommentForm
+
+    def test_func(self):
+        # Only allow the author to update
+        comment = self.get_object()
+        return comment.author == self.request.user
+    
+    def get_success_url(self):
+        comment = Comment.objects.get(pk=self.object.pk) 
+        return reverse("detail-view", kwargs={"pk": comment.post.pk})
+
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """ this one is for deleting a comment """
+    model = Comment
+    template_name = "blog/comment_confirm_delete.html"
+
+    def test_func(self):
+        # Only the author can delete
+        comment = self.get_object()
+        return comment.author == self.request.user
+
+    def get_success_url(self):
+        # Redirect to the post detail page after deletion
+        return reverse("detail-view", kwargs={"pk": self.object.post.pk})
