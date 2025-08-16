@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.forms import EmailField
 from django import forms
 from .models import Post, Comment
+from taggit.forms import TagField
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -17,9 +18,11 @@ class CustomUserCreationForm(UserCreationForm):
     
 
 class PostForm(forms.ModelForm):
+    tag = TagField(required=False)
+    
     class Meta:
         model = Post
-        fields = ["title", "content"]
+        fields = ["title", "content", "tag"]
 
 
 class CommentForm(forms.ModelForm):

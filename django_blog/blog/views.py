@@ -11,6 +11,7 @@ from django.views.generic import (
     ListView, CreateView, DeleteView, DetailView, UpdateView
 )
 from .forms import PostForm, CommentForm
+from django.db.models import Q
 
 
 class Registration(CreateView):
@@ -163,3 +164,19 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def get_success_url(self):
         # Redirect to the post detail page after deletion
         return reverse("detail-view", kwargs={"pk": self.object.post.pk})
+
+
+def post_search(request):
+    """ implements search functionality """
+    query = request.GET.get("q")
+    posts = Post.objects.all()
+
+    if query:
+        # filter by the required fields
+        posts = posts.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
+    
+    return render(request, "blog/search_results.html", {"posts": posts, "query": query})

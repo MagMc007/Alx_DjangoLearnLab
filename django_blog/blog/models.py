@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from taggit.managers import TaggableManager
 
 
 class Post(models.Model):
@@ -9,7 +10,9 @@ class Post(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE, 
-        related_name="publisher")    
+        related_name="publisher")  
+    # tag manager
+    tags = TaggableManager() 
 
     def __str__(self):
         return self.title
@@ -35,4 +38,3 @@ class Tag(models.Model):
     name = models.CharField(max_length=100)
     post = models.ManyToManyField(Post, related_name="tagged")
 
-    
