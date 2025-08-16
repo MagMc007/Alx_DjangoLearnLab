@@ -180,3 +180,10 @@ def post_search(request):
         ).distinct()
     
     return render(request, "blog/search_results.html", {"posts": posts, "query": query})
+
+
+def tagged_posts(request, tag_name):
+    """ renders a page with tagged posts name"""
+    posts = Post.objects.filter(tags__name=tag_name)
+    return render(request, "blog/posted_by_tag.html", {"posts": posts, "tag": tag_name})
+
