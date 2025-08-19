@@ -24,10 +24,10 @@ class RegisterSerializer(serializers.ModelSerializer):
     
     # overiding the user_creation_function
     def create(self, validated_data):
-        user = User.objects.create_user(
-            username = validated_data["username"],
-            email = validated_data["email"],
-            password = validated_data["password"]
+        user = get_user_model().objects.create_user(
+        username=validated_data["username"],
+        email=validated_data["email"],
+        password=validated_data["password"]
         )
         Token.objects.create(user=user)
         return user
