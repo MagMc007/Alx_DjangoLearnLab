@@ -21,7 +21,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     
     # overiding the user_creation_function
     def create(self, validated_data):
-        user = User.create_user(
+        user = User.objects.create_user(
             username = validated_data["username"],
             email = validated_data["email"],
             password = validated_data["password"]
@@ -29,13 +29,13 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
     
-class LoginSerializer(serializers.Serializers):
+class LoginSerializer(serializers.Serializer):
     """ serializers login credetial and validates """
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        user = authenticate(usename=data["username"], password=["password"])
-        if user and user.is_active():
+        user = authenticate(username=data["username"], password=data["password"])
+        if user and user.is_active:
             return user
         raise serializers.ValidationError("Invalid credentials")
