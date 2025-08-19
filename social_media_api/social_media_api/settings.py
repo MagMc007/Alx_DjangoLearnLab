@@ -123,10 +123,12 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+# new user model
+AUTH_USER_MODEL = "accounts.User"
 
-
+# token authentication 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASES": [
-        "rest_framwork.TokenAthentication",
-    ]
+        "rest_framework.authentication.TokenAthentication",
+    ],
 }
