@@ -9,5 +9,5 @@ router.register(r'comments', views.CommentViewSet, basename='comment')
 
 
 urlpatterns = [
-    path("api/", include(router.urls),)
+    path("", include(router.urls),)
 ]

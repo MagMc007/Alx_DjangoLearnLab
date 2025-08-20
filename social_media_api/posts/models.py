@@ -18,5 +18,6 @@ class Comment(models.Model):
     """ a comment on a post """
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commented_by")
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="commented_on")
+    content = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)

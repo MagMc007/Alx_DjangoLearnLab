@@ -6,7 +6,7 @@ class CommentSerializer(serializers.ModelSerializer):
     """ serializes comment data """
     class Meta:
         model = Comment
-        fields = ["content"]
+        fields = ["id", "post", "author", "content"]
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -15,5 +15,5 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ["id", "title", "author", "content",]
+        fields = ["id", "title", "author", "content", "comments"]
 
