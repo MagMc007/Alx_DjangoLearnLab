@@ -62,8 +62,8 @@ class LikeView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Like.objects.all()
 
-    def post(self, request, post_id):
-        post = get_object_or_404(Post, id=post_id)  # get the post to like 
+    def post(self, request, pk):
+        post = get_object_or_404(Post, id=pk)  # get the post to like 
         target_user = request.user   # get the user liking the post
         # Prevent multiple likes
         if Like.objects.filter(post=post, liked_by=target_user).exists():
@@ -86,8 +86,8 @@ class UnLikeView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Like.objects.all()
 
-    def post(self, request, post_id):
-        post = get_object_or_404(Post, id=post_id)
+    def post(self, request, pk):
+        post = get_object_or_404(Post, id=pk)
         target_user = request.user
         like = Like.objects.filter(post=post, liked_by=target_user)
         if not like:
