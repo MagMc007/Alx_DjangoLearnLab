@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from notifications.models import Notification
 from rest_framework import status
 from django.shortcuts import get_object_or_404
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class IsAuthorOrReadOnly(permissions.BasePermission):
@@ -63,13 +64,13 @@ class LikeView(APIView):
     queryset = Like.objects.all()
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, id=pk)  # get the post to like 
+        post = get_object_or_404(Post, pk=pk)  # get the post to like 
         target_user = request.user   # get the user liking the post
         # Prevent multiple likes
-        if Like.objects.filter(post=post, liked_by=target_user).exists():
-            return Response({"detail": "You already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
-        Like.objects.create(post=post, liked_by=target_user) # create the like 
+        like, created = Like.objects.get_or_create(post=post, liked_by=target_user) # create the like 
+        if not created:
+            return Response({"detail": "You already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
         if post.author != target_user:  # assuming Post has `author` field
             Notification.objects.create(
@@ -87,12 +88,12 @@ class UnLikeView(APIView):
     queryset = Like.objects.all()
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, id=pk)
+        post = get_object_or_404(Post, pk=pk)
         target_user = request.user
-        like = Like.objects.filter(post=post, liked_by=target_user)
-        if not like:
+        try:
+            like = Like.objects.get(post=post, liked_by=target_user)
+        except ObjectDoesNotExist:
             return Response({"detail": "You did not like the post"}, status=status.HTTP_400_BAD_REQUEST)
-
         like.delete()
         return Response({"detail": "Unliked successfully"}, status=status.HTTP_200_OK)
 
