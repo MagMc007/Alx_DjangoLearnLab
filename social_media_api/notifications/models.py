@@ -16,7 +16,6 @@ class Notification(models.Model):
     target_content = models.ForeignKey(ContentType, on_delete=models.CASCADE, related_name="targeted_content")
     target_object_id = models.PositiveIntegerField()
     target = GenericForeignKey("target_content", "target_object_id")
-
     timestamp = models.DateTimeField(auto_now_add=True)
     
 

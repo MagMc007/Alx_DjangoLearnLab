@@ -10,6 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
     # implement follow logic
     followers_count = serializers.IntegerField(source="followers.count", read_only=True)
     following_count = serializers.IntegerField(source="following.count", read_only=True)
+   
     class Meta:
         model = User
         fields = [
