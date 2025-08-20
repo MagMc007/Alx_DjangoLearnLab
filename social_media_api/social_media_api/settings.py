@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "notifications",
     "django_filters",
     "posts",
     "rest_framework.authtoken",
