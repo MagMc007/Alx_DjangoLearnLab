@@ -9,7 +9,9 @@ class UserSerializer(serializers.ModelSerializer):
     """ serializes only user info """
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'bio', 'profile_picture', 'followers']
+        fields = [
+            'id', 'username', 'email', 'bio', 'profile_picture', 'followers'
+            ]
     
     
 class RegisterSerializer(serializers.ModelSerializer):
