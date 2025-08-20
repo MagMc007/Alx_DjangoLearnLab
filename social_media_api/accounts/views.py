@@ -6,6 +6,10 @@ from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework import permissions
 
+
+CustomUser = User
+
+
 class RegisterView(generics.CreateAPIView):
     """ api view for user creations/ registry """
     queryset = User.objects.all()
@@ -43,12 +47,12 @@ class ProfileView(generics.RetrieveAPIView):
 class FollowUserView(generics.GenericAPIView):
     """ implements user following an other user """
     permission_classes = [permissions.IsAuthenticated]  # user must be logged in
-    queryset = User.objects.all()
+    queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):  # user_id = whom other user want to follow
         try:
-            target_user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
+            target_user = CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
             return Response({"error": "User not found"}, status=404)
 
         if target_user == request.user:
@@ -64,11 +68,11 @@ class FollowUserView(generics.GenericAPIView):
 class UnfollowUserView(generics.GenericAPIView):
     """ implements user unfollowing another """
     permission_classes = [permissions.IsAuthenticated]
-    queryset = User.objects.all()
+    queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):
         try:
-            target_user = User.objects.get(id=user_id)
+            target_user = CustomUser.objects.get(id=user_id)
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=404)
 
