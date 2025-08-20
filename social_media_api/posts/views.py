@@ -1,9 +1,9 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, filters
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
-
+from rest_framework.pagination import PageNumberPagination
 
 class IsAuthorOrReadOnly(permissions.BasePermission):
     """
@@ -24,6 +24,9 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title', 'content'] 
+    pagination_class = PageNumberPagination
 
 
 class CommentViewSet(viewsets.ModelViewSet):
