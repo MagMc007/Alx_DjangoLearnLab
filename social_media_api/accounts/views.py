@@ -61,7 +61,7 @@ class FollowUserView(APIView):
         return Response({"message": f"You are now following {target_user.username}"})
 
    
-class UnfollowUserView(generics.DestroyAPIView):
+class UnfollowUserView(APIView):
     """ implements user unfollowing another """
     permission_classes = [IsAuthenticated]
 
@@ -79,4 +79,3 @@ class UnfollowUserView(generics.DestroyAPIView):
 
         request.user.following.remove(target_user)
         return Response({"message": f"You unfollowed {target_user.username}"})
-    
