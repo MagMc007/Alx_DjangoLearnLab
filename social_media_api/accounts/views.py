@@ -4,8 +4,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-
+from rest_framework import permissions
 
 class RegisterView(generics.CreateAPIView):
     """ api view for user creations/ registry """
@@ -33,7 +32,7 @@ class LoginView(APIView):
 class ProfileView(generics.RetrieveAPIView):
     """ user profile """
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
         print("User:", self.request.user)  
@@ -41,9 +40,10 @@ class ProfileView(generics.RetrieveAPIView):
         return self.request.user
     
 
-class FollowUserView(APIView):
+class FollowUserView(generics.GenericAPIView):
     """ implements user following an other user """
-    permission_classes = [IsAuthenticated]  # user must be logged in
+    permission_classes = [permissions.IsAuthenticated]  # user must be logged in
+    queryset = User.objects.all()
 
     def post(self, request, user_id):  # user_id = whom other user want to follow
         try:
@@ -61,9 +61,10 @@ class FollowUserView(APIView):
         return Response({"message": f"You are now following {target_user.username}"})
 
    
-class UnfollowUserView(APIView):
+class UnfollowUserView(generics.GenericAPIView):
     """ implements user unfollowing another """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = User.objects.all()
 
     def post(self, request, user_id):
         try:
