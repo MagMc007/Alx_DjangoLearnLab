@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from notifications.models import Notification
 from rest_framework import status
-from django.shortcuts import get_object_or_404
+from rest_framework import generics
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -64,15 +64,14 @@ class LikeView(APIView):
     queryset = Like.objects.all()
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)  # get the post to like 
-        target_user = request.user   # get the user liking the post
+        post = generics.get_object_or_404(Post, pk=pk)  # get the post to like 
         # Prevent multiple likes
 
-        like, created = Like.objects.get_or_create(post=post, liked_by=target_user) # create the like 
+        like, created = Like.objects.get_or_create(post=post, user=request.user ) # create the like 
         if not created:
             return Response({"detail": "You already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
-        if post.author != target_user:  # assuming Post has `author` field
+        if post.author != request.user:  # assuming Post has `author` field
             Notification.objects.create(
                 recipient=post.author,
                 actor=request.user,
@@ -88,7 +87,7 @@ class UnLikeView(APIView):
     queryset = Like.objects.all()
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)
         target_user = request.user
         try:
             like = Like.objects.get(post=post, liked_by=target_user)
