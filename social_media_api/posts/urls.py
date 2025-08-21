@@ -11,6 +11,6 @@ router.register(r'comments', views.CommentViewSet, basename='comment')
 urlpatterns = [
     path("", include(router.urls),),
     path("feed/", views.FeedView.as_view(), name="feed"),
-    path('posts/<int:pk>/like/', views.LikeView.as_view(), name="like-post"),
-    path('posts/<int:pk>/unlike/', views.UnLikeView.as_view(), name="unlike-post"),
+    path('post/<int:pk>/like/', views.LikeView.as_view(), name="like-post"),
+    path('post/<int:pk>/unlike/', views.UnLikeView.as_view(), name="unlike-post"),
 ]

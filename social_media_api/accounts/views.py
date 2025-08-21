@@ -39,8 +39,6 @@ class ProfileView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
-        print("User:", self.request.user)  
-        print("Auth:", self.request.auth)
         return self.request.user
     
 
@@ -56,7 +54,7 @@ class FollowUserView(generics.GenericAPIView):
             return Response({"error": "User not found"}, status=404)
 
         if target_user == request.user:
-            return Response({"error": "You cannot follow yourself"}, status=400)
+            return Response({"error": "You cannot follow yourself"}, status=status.HTTP_400_BAD_REQUEST)
 
         if target_user in request.user.following.all():
             return Response({"error": "You already follow this user"}, status=status.HTTP_400_BAD_REQUEST)
@@ -73,7 +71,7 @@ class UnfollowUserView(generics.GenericAPIView):
     def post(self, request, user_id):
         try:
             target_user = CustomUser.objects.get(id=user_id)
-        except User.DoesNotExist:
+        except CustomUser.DoesNotExist:
             return Response({"error": "User not found"}, status=404)
 
         if target_user == request.user:

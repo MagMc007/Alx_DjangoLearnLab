@@ -9,6 +9,9 @@ from notifications.models import Notification
 from rest_framework import status
 from rest_framework import generics
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404
+from django.contrib.contenttypes.models import ContentType
+
 
 
 class IsAuthorOrReadOnly(permissions.BasePermission):
@@ -40,10 +43,21 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all().order_by('created_at')
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticated, IsAuthorOrReadOnly]
-
+    
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        # Save the comment with the current user as author
+        comment = serializer.save(author=self.request.user)
 
+        # Create a notification for the post's author (if the commenter is not the author)
+        if comment.post.author != self.request.user:
+            Notification.objects.create(
+                recipient=comment.post.author,
+                actor=self.request.user,
+                verb="commented on your post",
+                target_content=ContentType.objects.get_for_model(comment),
+                target_object_id=comment.id,
+            )
+    
 
 class FeedView(APIView):
     """ to handle follower post feed """
@@ -58,41 +72,38 @@ class FeedView(APIView):
         return Response(serializer.data)
 
 
-class LikeView(APIView):
+class LikeView(generics.GenericAPIView):
     """ handles liking a post """
     permission_classes = [permissions.IsAuthenticated]
     queryset = Like.objects.all()
 
     def post(self, request, pk):
-        post = generics.get_object_or_404(Post, pk=pk)  # get the post to like 
-        # Prevent multiple likes
-
+        post = get_object_or_404(Post, pk=pk)  # get the post to like 
+        
         like, created = Like.objects.get_or_create(user=request.user, post=post) # create the like 
+        # Prevent multiple likes
         if not created:
             return Response({"detail": "You already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
-        if post.author != request.user:  # assuming Post has `author` field
+        if post.author != request.user:
             Notification.objects.create(
                 recipient=post.author,
                 actor=request.user,
                 verb="liked your post",
-                target=post
+                target_content=ContentType.objects.get_for_model(post),
+                target_object_id=post.id,
             )
         return Response({"detail": "Post liked successfully!"}, status=status.HTTP_201_CREATED)
 
 
-class UnLikeView(APIView):
+class UnLikeView(generics.GenericAPIView):
     """ deleting a like """
     permission_classes = [permissions.IsAuthenticated]
     queryset = Like.objects.all()
 
     def post(self, request, pk):
-        post = generics.get_object_or_404(Post, pk=pk)
-        target_user = request.user
-        try:
-            like = Like.objects.get(post=post, liked_by=target_user)
-        except ObjectDoesNotExist:
-            return Response({"detail": "You did not like the post"}, status=status.HTTP_400_BAD_REQUEST)
+        post = get_object_or_404(Post, pk=pk)
+        like = get_object_or_404(Like, post=post.id, user=request.user)
         like.delete()
         return Response({"detail": "Unliked successfully"}, status=status.HTTP_200_OK)
 
