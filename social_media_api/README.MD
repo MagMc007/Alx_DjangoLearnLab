@@ -490,7 +490,7 @@ Replace not_id with the notification id
 {
     "detail": "Notification marked as read"
 }
-
+```
 ### D. Mark all Notification as Read
 **Endpoint:** POST notifications/mark_all_read/  
 
@@ -501,3 +501,4 @@ Replace not_id with the notification id
 {
         "detail": "All notifications marked as read"
 }
+```
