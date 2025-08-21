@@ -440,6 +440,7 @@ Notifications are automatically created when:
 
 ### A. All notifications
 **Endpoint:** GET notifications/notifications/
+
 **Notice**
 - make sure you have changed the user you are checking with on post man to get a populated notifcation result
 
@@ -465,6 +466,11 @@ Success Response (200 OK):
 }
 ```
 ### B. Getting Individual Notification
+
+**Endpoint:** GET notifications/notifications/not_id/
+
+Replace not_id with the notification id.
+
 **Request (json):** Not required
 
 Success Response (200 OK):
