@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-wv^x%dz@-_pi5m4vx^x68qn4@oa$74k#6owi8xh-q)kx)8g-t8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["magssocialmediaapi.pythonanywhere.com"]
+ALLOWED_HOSTS = ["mag25.pythonanywhere.com"]
 
 
 # Application definition
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -82,10 +83,18 @@ WSGI_APPLICATION = "social_media_api.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": BASE_DIR / "...",
+        'USER': 'mag25',
+        'PASSWORD': "...",
+        'HOST': 'mag25.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
+
 
 
 # Password validation
@@ -123,6 +132,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -147,16 +157,18 @@ REST_FRAMEWORK = {
     ],
 }
 
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'ik)@d-#y0r&m(3i&%a(ra7ggyc+uzd(vpn$-h@ub+ai4e3-5@@')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'i-aq6o%rnco!6t@pd559s0kn&_==@1kuofk)u717!phk-3gpt9')
 
 
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_SSL_REDIRECT = True  # If you have HTTPS
+SECURE_SSL_REDIRECT = True  # 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-
+SECURE_HSTS_SECONDS = 31536000  
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  
+SECURE_HSTS_PRELOAD = True  
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # collectstatic will collect files here
