@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-wv^x%dz@-_pi5m4vx^x68qn4@oa$74k#6owi8xh-q)kx)8g-t8"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["magssocialmediaapi.pythonanywhere.com"]
 
 
 # Application definition
@@ -145,7 +147,19 @@ REST_FRAMEWORK = {
     ],
 }
 
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'ik)@d-#y0r&m(3i&%a(ra7ggyc+uzd(vpn$-h@ub+ai4e3-5@@')
 
 
-APPEND_SLASH = False
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_SSL_REDIRECT = True  # If you have HTTPS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # collectstatic will collect files here
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # user uploaded files

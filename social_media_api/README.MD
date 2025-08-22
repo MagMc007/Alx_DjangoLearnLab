@@ -1,6 +1,9 @@
 # Social Media API Documentation
 This project is a **Django REST Framework (DRF) based Social Media API** that provides backend functionality for a social networking platform. It covers essential features of a modern social media app, including **authentication, posting, following, liking, commenting, feeds, and notifications**.  
-
+## Installation Direction 
+```json
+pip install django djangorestframework
+```
 ## 1. Authentication  
 
 ### A. Register  
